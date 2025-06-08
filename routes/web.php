@@ -8,6 +8,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/', [PokeController::class, 'index']); //Mostrar el index principal de la web
+//Route::get('/', [PokeController::class, 'index']); //Mostrar el index principal de la web
 //Route::get('/pokemon/{name?}', [PokeController::class, 'show']); 
-
+Route::get('/', [PokeController::class, 'index'])->name('pokedex');

@@ -9,20 +9,23 @@
 <body>
     <h1 style="text-align: center;">🧩 Pokédex Inicial</h1>
 
-    <div class="container">
-        @foreach($pokemons as $pokemon)
-            <div class="card" onclick="showDetails({{ $pokemon['id'] }})">
-                <img src="{{ $pokemon['image'] }}" alt="{{ $pokemon['name'] }}">
-                <h3>{{ ucfirst($pokemon['name']) }}</h3>
-                <div class="types">
-                    @foreach($pokemon['types'] as $type)
-                        <span>{{ ucfirst($type) }}</span>
-                    @endforeach
-                </div>
+   <div class="container">
+    @foreach ($pokemons as $pokemon)
+        <div class="card" onclick="showDetails({{ $pokemon['id'] }})">
+            <img src="{{ $pokemon['image'] }}" alt="{{ $pokemon['name'] }}">
+            <h3>{{ ucfirst($pokemon['name']) }}</h3>
+            <div class="types">
+                @foreach($pokemon['types'] as $type)
+                    <span>{{ ucfirst($type) }}</span>
+                @endforeach
             </div>
-        @endforeach
-    </div>
-
+        </div>
+    @endforeach
+</div>
+<!-- Paginación -->
+<div class="pagination">
+    {{ $pokemons->links() }}
+</div>
     <!-- Modal único (fuera del foreach y container) -->
     <div id="pokemonModal" class="modal" style="display: none;">
         <div class="modal-content">

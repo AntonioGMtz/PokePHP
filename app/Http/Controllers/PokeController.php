@@ -2,43 +2,53 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 class PokeController extends Controller
 {
-   /* public function show($name = 'charmander')
-    {
-        $response = Http::get("https://pokeapi.co/api/v2/pokemon/" . strtolower($name));
 
-        if ($response->successful()) {
-            $pokemon = $response->json();
-            return view('pokemon', compact('pokemon'));
-        } else {
-            abort(404, 'Pokémon no encontrado');
-        }
+ public function index(Request $request)
+{
+    $perPage = 18;
+    $page = $request->get('page', 1);
+    $offset = ($page - 1) * $perPage;
+
+    // Obtener los primeros 151 Pokémon
+    $response = Http::get("https://pokeapi.co/api/v2/pokemon?limit=151");
+    $results = $response->json()['results'];
+
+    // Cortar solo los que necesitamos para esta página
+    $pageResults = array_slice($results, $offset, $perPage);
+
+    $pokemons = [];
+
+    foreach ($pageResults as $result) {
+        $data = Http::get($result['url'])->json();
+        $pokemons[] = [
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'image' => $data['sprites']['front_default'],
+            'height' => $data['height'],
+            'weight' => $data['weight'],
+            'types' => array_map(fn($type) => $type['type']['name'], $data['types']),
+            'abilities' => array_map(fn($ability) => $ability['ability']['name'], $data['abilities']),
+            'stats' => array_map(fn($stat) => [
+                'name' => $stat['stat']['name'],
+                'base' => $stat['base_stat']
+            ], $data['stats'])
+        ];
     }
-        */
 
-    public function index()
-    {
-        // Obtener los primeros N Pokémon desde la API
-        $response = Http::get('https://pokeapi.co/api/v2/pokemon?limit=24');
-        $results = $response->json()['results'];
+    // Crear paginador manual
+    $paginator = new LengthAwarePaginator(
+        $pokemons,
+        count($results),
+        $perPage,
+        $page,
+        ['path' => route('pokedex')] // Ajusta según tu ruta
+    );
 
-        // Obtener los datos completos de cada Pokémon
-        $pokemons = [];
-
-        foreach ($results as $result) {
-            $data = Http::get($result['url'])->json();
-            $pokemons[] = [   //Datos del JSON A EXTRAER
-                'id' => $data['id'], // ✅ Esto es lo que faltaba
-                'name' => $data['name'],
-                'image' => $data['sprites']['front_default'],
-                'height' => $data['height'],
-                'weight' => $data['weight'],
-                'types' => array_map(fn($type) => $type['type']['name'], $data['types']),
-            ];
-        }
-
-        return view('index', compact('pokemons'));
-    }
+    return view('index', ['pokemons' => $paginator]);
+}
 }
