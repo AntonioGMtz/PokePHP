@@ -20,9 +20,8 @@ class PokeController extends Controller
 
     public function index()
     {
-        // Obtener los primeros 10 Pokémon desde la API
-        $response = Http::get('https://pokeapi.co/api/v2/pokemon?limit=18');
-
+        // Obtener los primeros 18 Pokémon desde la API
+        $response = Http::get('https://pokeapi.co/api/v2/pokemon?limit=24');
         $results = $response->json()['results'];
 
         // Obtener los datos completos de cada Pokémon
@@ -31,6 +30,7 @@ class PokeController extends Controller
         foreach ($results as $result) {
             $data = Http::get($result['url'])->json();
             $pokemons[] = [
+                'id' => $data['id'], // ✅ Esto es lo que faltaba
                 'name' => $data['name'],
                 'image' => $data['sprites']['front_default'],
                 'height' => $data['height'],
@@ -40,5 +40,5 @@ class PokeController extends Controller
         }
 
         return view('index', compact('pokemons'));
-    }    
+    }
 }
