@@ -20,7 +20,7 @@ class PokeController extends Controller
 
     public function index()
     {
-        // Obtener los primeros 18 Pokémon desde la API
+        // Obtener los primeros N Pokémon desde la API
         $response = Http::get('https://pokeapi.co/api/v2/pokemon?limit=24');
         $results = $response->json()['results'];
 
@@ -29,7 +29,7 @@ class PokeController extends Controller
 
         foreach ($results as $result) {
             $data = Http::get($result['url'])->json();
-            $pokemons[] = [
+            $pokemons[] = [   //Datos del JSON A EXTRAER
                 'id' => $data['id'], // ✅ Esto es lo que faltaba
                 'name' => $data['name'],
                 'image' => $data['sprites']['front_default'],
