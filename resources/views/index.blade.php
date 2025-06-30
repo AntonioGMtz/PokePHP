@@ -8,6 +8,14 @@
 </head>
 <body>
     <h1 style="text-align: center;">🧩 Pokédex Inicial</h1>
+    <!-- Barra de búsqueda -->
+    <!-- Barra de búsqueda a lo ancho -->
+<div class="search-bar">
+    <form method="GET" action="{{ route('pokedex') }}" class="search-form">
+        <input type="text" name="search" placeholder="Buscar Pokémon..." value="{{ request('search') }}">
+        <button type="submit">Buscar</button>
+    </form>
+</div>
 
    <div class="container">
     @foreach ($pokemons as $pokemon)
