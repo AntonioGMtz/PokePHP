@@ -170,3 +170,51 @@ img {
 .search-form button:hover {
   background-color: #45a049;
 }
+
+
+/*FILTROS POR TIPO*/
+/* Sección de filtros */
+.filter-section {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.filter-section h2 {
+  margin-bottom: 15px;
+}
+
+/* Contenedor de los badges */
+.type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Badge base */
+.type-badge {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.type-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Colores por tipo */
+.type-fire { background: #EE8130; }      /* Fuego - rojo/naranja */
+.type-water { background: #6390F0; }     /* Agua - azul */
+.type-grass { background: #7AC74C; }     /* Planta - verde */
+.type-electric { background: #F7D02C; }  /* Eléctrico - amarillo */
+.type-flying { background: #A98FF3; }    /* Volador - lila/gris azulado */
+.type-bug { background: #A6B91A; }       /* Bicho - verde oliva */
+.type-normal { background: #A8A77A; }    /* Normal - gris claro */
+.type-psychic { background: #F95587; }   /* Psíquico - rosa */

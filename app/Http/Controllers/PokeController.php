@@ -14,27 +14,42 @@ public function index(Request $request)
     $page = $request->get('page', 1);
     $offset = ($page - 1) * $perPage;
 
-    // 1) Obtener todos los resultados
+    // 1) Trae todos los Pokémon
     $response = Http::get("https://pokeapi.co/api/v2/pokemon?limit=151");
     $results = $response->json()['results'];
 
-    // 2) Filtrar por nombre si hay búsqueda
+    // 2) Filtra por nombre si hay búsqueda
     $search = $request->get('search');
     if ($search) {
-        $results = array_filter($results, function($pokemon) use ($search) {
+        $results = array_filter($results, function ($pokemon) use ($search) {
             return stripos($pokemon['name'], $search) !== false;
         });
-        $results = array_values($results); // Reindexar después de filtrar
+        $results = array_values($results);
     }
 
     // 3) Cortar solo los que necesitamos para esta página
     $pageResults = array_slice($results, $offset, $perPage);
 
-    // 4) Obtener datos detallados
     $pokemons = [];
 
     foreach ($pageResults as $result) {
         $data = Http::get($result['url'])->json();
+
+        // 4) Si hay filtro por tipo, revisa los tipos del Pokémon
+        $type = $request->get('type');
+        if ($type) {
+            $hasType = false;
+            foreach ($data['types'] as $t) {
+                if (strtolower($t['type']['name']) == strtolower($type)) {
+                    $hasType = true;
+                    break;
+                }
+            }
+            if (!$hasType) {
+                continue; // Omitir Pokémon que no tienen el tipo
+            }
+        }
+
         $pokemons[] = [
             'id' => $data['id'],
             'name' => $data['name'],
@@ -50,13 +65,17 @@ public function index(Request $request)
         ];
     }
 
-    // 5) Crear paginador manual
+    // 5) Crear paginador manual SOLO con los que pasaron ambos filtros
+    $totalResults = count($pokemons);
+
+    $paginated = array_slice($pokemons, 0, $perPage); // Paginado manual
+
     $paginator = new LengthAwarePaginator(
-        $pokemons,
-        count($results), // total filtrado
+        $paginated,
+        $totalResults,
         $perPage,
         $page,
-        ['path' => route('pokedex')] // Ajusta según tu ruta
+        ['path' => route('pokedex')]
     );
 
     return view('index', ['pokemons' => $paginator]);

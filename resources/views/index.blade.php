@@ -7,7 +7,14 @@
  
 </head>
 <body>
-    <h1 style="text-align: center;">🧩 Pokédex Inicial</h1>
+    <h1 style="text-align: center;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" viewBox="0 0 64 64" style="vertical-align: middle; margin-right: 10px;">
+    <circle cx="32" cy="32" r="30" fill="white" stroke="black" stroke-width="4"/>
+    <path d="M2,32 H62" stroke="black" stroke-width="4"/>
+    <circle cx="32" cy="32" r="10" fill="white" stroke="black" stroke-width="4"/>
+  </svg>
+  Pokédex Inicial
+</h1>
     <!-- Barra de búsqueda -->
     <!-- Barra de búsqueda a lo ancho -->
 <div class="search-bar">
@@ -15,6 +22,22 @@
         <input type="text" name="search" placeholder="Buscar Pokémon..." value="{{ request('search') }}">
         <button type="submit">Buscar</button>
     </form>
+</div>
+
+
+<div class="filter-section">
+  <h2>Filtrar por:</h2>
+  <div class="type-filters">
+    <a href="{{ route('pokedex', ['type' => 'fire']) }}" class="type-badge type-fire">Fuego</a>
+    <a href="{{ route('pokedex', ['type' => 'water']) }}" class="type-badge type-water">Agua</a>
+    <a href="{{ route('pokedex', ['type' => 'grass']) }}" class="type-badge type-grass">Planta</a>
+    <a href="{{ route('pokedex', ['type' => 'electric']) }}" class="type-badge type-electric">Eléctrico</a>
+    <a href="{{ route('pokedex', ['type' => 'flying']) }}" class="type-badge type-flying">Volador</a>
+    <a href="{{ route('pokedex', ['type' => 'bug']) }}" class="type-badge type-bug">Bicho</a>
+    <a href="{{ route('pokedex', ['type' => 'normal']) }}" class="type-badge type-normal">Normal</a>
+    <a href="{{ route('pokedex', ['type' => 'psychic']) }}" class="type-badge type-psychic">Psíquico</a>
+    <!-- Agrega los demás tipos -->
+  </div>
 </div>
 
    <div class="container">
